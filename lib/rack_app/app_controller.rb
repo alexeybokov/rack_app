@@ -6,28 +6,15 @@ module RackApp
         when '/run'
           run
         end
-      else
-        case @request.path
-        when '/'
-          start 'new game' # reset secret code & hint status in server side file_DB
-          index
-        when "/hint"
-          hint
-        else
-          Rack::Response.new('Not Found', 404)
-        end
       end
     end
 
     def run
-      puts @request.params.inspect
+      puts params.inspect
+      result = game(params['numbers'], params['current_round']).run
       # run game
-      Rack::Response.new(
-        {
-          result: "the value #{@request.params['numbers']} is correct",
-          current_round: 123
-        }.to_json
-      )
+      puts result.to_json
+      Rack::Response.new(result.to_json)
     end
 
     def index
@@ -35,10 +22,19 @@ module RackApp
     end
 
     def hint
-      Rack::Response.new(@game.hint.result)
+      Rack::Response.new(game.hint.result)
     end
 
     private
+
+    # def start(arg)
+    #   return @game = Codebreaker::Game.new if arg
+    #   @game ||= Codebreaker::Game.new
+    # end
+    #
+    def params
+      @request.params
+    end
 
     def game(numbers, current_round)
       Codebreaker::Game.new(numbers, current_round)
