@@ -4,7 +4,7 @@ PATH
     rack_app (0.1.0)
 
 PATH
-  remote: /opt/projects/other_projects/codebreaker
+  remote: /home/alexey/Documents/projects/ruby_on_rails_course/codebreaker
   specs:
     codebreaker (0.1.0)
 
